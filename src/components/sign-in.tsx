@@ -8,8 +8,11 @@ export default function SignIn() {
         "use server";
         await signIn("google");
       }}
+      className="absolute top-6 right-6"
     >
-      <Button type="submit">Signin with Google</Button>
+      <Button type="submit" className="px-6">
+        Log in
+      </Button>
     </form>
   );
 }

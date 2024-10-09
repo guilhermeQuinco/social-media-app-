@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
+import { SideBar } from "@/components/side-bar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,7 +15,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="min-h-screen bg-background antialiased">{children}</body>
+      <body className="min-h-screen">
+        <SideBar />
+        <div className="w-full ">
+          <header className="fixed top-0 left-0 bg-black w-full py-6 flex justify-center  items-center">
+            <span className="text-white">Home</span>
+          </header>
+          <main className="">{children}</main>
+        </div>
+      </body>
     </html>
   );
 }
