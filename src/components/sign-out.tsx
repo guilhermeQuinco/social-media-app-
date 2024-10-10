@@ -8,7 +8,7 @@ export function SignOut() {
         "use server";
         await signOut();
       }}
-      className="absolute top-6 right-6"
+      className="absolute top-6 right-6 z-10"
     >
       <Button type="submit">Sign Out</Button>
     </form>

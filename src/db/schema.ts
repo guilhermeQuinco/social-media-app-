@@ -1,8 +1,10 @@
+import { relations } from "drizzle-orm";
+
 import {
-  boolean,
   integer,
   pgTable,
   primaryKey,
+  serial,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
@@ -64,34 +66,38 @@ export const verificationTokens = pgTable(
   })
 );
 
-export const authenticators = pgTable(
-  "authenticator",
-  {
-    credentialID: text("credentialID").notNull().unique(),
-    userId: text("userId")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    providerAccountId: text("providerAccountId").notNull(),
-    credentialPublicKey: text("credentialPublicKey").notNull(),
-    counter: integer("counter").notNull(),
-    credentialDeviceType: text("credentialDeviceType").notNull(),
-    credentialBackedUp: boolean("credentialBackedUp").notNull(),
-    transports: text("transports"),
-  },
-  (authenticator) => ({
-    compositePK: primaryKey({
-      columns: [authenticator.userId, authenticator.credentialID],
-    }),
-  })
-);
+// export const authenticators = pgTable(
+//   "authenticator",
+//   {
+//     credentialID: text("credentialID").notNull().unique(),
+//     userId: text("userId")
+//       .notNull()
+//       .references(() => users.id, { onDelete: "cascade" }),
+//     providerAccountId: text("providerAccountId").notNull(),
+//     credentialPublicKey: text("credentialPublicKey").notNull(),
+//     counter: integer("counter").notNull(),
+//     credentialDeviceType: text("credentialDeviceType").notNull(),
+//     credentialBackedUp: boolean("credentialBackedUp").notNull(),
+//     transports: text("transports"),
+//   },
+//   (authenticator) => ({
+//     compositePK: primaryKey({
+//       columns: [authenticator.userId, authenticator.credentialID],
+//     }),
+//   })
+// );
 
 export const posts = pgTable("posts", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => crypto.randomUUID()),
-
+  id: serial("id").primaryKey(),
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   content: text("content").notNull(),
 });
+
+export const postsRelations = relations(posts, ({ one }) => ({
+  user: one(users, {
+    fields: [posts.userId],
+    references: [users.id],
+  }),
+}));

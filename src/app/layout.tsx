@@ -18,7 +18,7 @@ export default function RootLayout({
       <body className="min-h-screen">
         <SideBar />
         <div className="w-full ">
-          <header className="fixed top-0 left-0 bg-black w-full py-6 flex justify-center  items-center">
+          <header className="fixed top-0 left-0 bg-black w-full py-6 flex justify-center z-10 items-center">
             <span className="text-white">Home</span>
           </header>
           <main className="">{children}</main>
