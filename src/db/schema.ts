@@ -2,6 +2,7 @@ import { relations } from "drizzle-orm";
 
 import {
   integer,
+  pgEnum,
   pgTable,
   primaryKey,
   serial,
@@ -87,6 +88,21 @@ export const verificationTokens = pgTable(
 //     }),
 //   })
 // );
+
+export const mediaType = pgEnum("media_type", ["image", "video"]);
+
+export const media = pgTable("media", {
+  id: serial("id").primaryKey(),
+  type: mediaType("type").notNull(),
+  fileKey: text("file_key").notNull(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
+  postId: integer("post_id").references(() => posts.id),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+});
 
 export const posts = pgTable("posts", {
   id: serial("id").primaryKey(),

@@ -23,3 +23,5 @@ if (env.NODE_ENV === "production") {
 }
 
 export { database, pg };
+
+export * from "drizzle-orm";

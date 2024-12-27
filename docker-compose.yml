@@ -1,14 +1,9 @@
 services:
   social-media-db:
-    image: postgres
-    restart: always
+    image: bitnami/postgresql
     ports:
       - 5432:5432
     environment:
-      POSTGRES_PASSWORD: example
-      PGDATA: /data/postgres
-    volumes:
-      - postgres:/data/postgres
-
-volumes:
-  postgres:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=docker
+      - POSTGRES_DATABASE=socialmediadb

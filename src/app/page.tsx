@@ -8,18 +8,17 @@ import { auth } from "./auth";
 import { SignOut } from "@/components/sign-out";
 
 import { ButtonPost } from "@/components/button-dialog-post";
-import createPost from "./actions";
+//import createPost from "./actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import { asc, desc } from "drizzle-orm";
+import Link from "next/link";
+import { postsFeedQuery } from "@/db/querys/postsQuery";
 
 export default async function Home() {
   const session = await auth();
 
-  const postsQuery = await database.query.posts.findMany({
-    orderBy: [desc(posts.id)],
-    with: { user: true },
-  });
+  const posts = await postsFeedQuery.execute();
 
   return (
     <main className="w-full overflow-hidden h-screen ">
@@ -27,7 +26,7 @@ export default async function Home() {
         {session?.user ? <SignOut /> : <SignIn />}
         <section className="w-full max-w-[900px] p-5 absolute top-32">
           <div className="flex flex-col gap-5 mt-1 ">
-            {postsQuery.map((item) => (
+            {posts.map((item) => (
               <div
                 className="flex flex-col gap-3 bg-gray-900 p-5 rounded-xl"
                 key={item.id}
@@ -46,6 +45,18 @@ export default async function Home() {
                 <span className="text-white ml-[50px] whitespace-pre-line break-words">
                   {item.content}
                 </span>
+                <Link href={`/post/${item.id}`}>
+                  <div className=" ml-[50px] rounded-2xl w-fill h-full relative overflow-hidden">
+                    <Image
+                      className="rounded-2xl "
+                      src={item.media?.fileKey as string}
+                      alt={item.content}
+                      objectFit="cover"
+                      width={500}
+                      height={500}
+                    />
+                  </div>
+                </Link>
               </div>
             ))}
           </div>
